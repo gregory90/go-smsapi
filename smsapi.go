@@ -1,0 +1,47 @@
+package smsapi
+
+import (
+	"errors"
+	"strings"
+
+	"bitbucket.org/pqstudio/go-webutils"
+	"bitbucket.org/pqstudio/go-webutils/request"
+
+	. "bitbucket.org/pqstudio/go-webutils/logger"
+)
+
+var (
+	apiHost  string
+	user     string
+	password string
+	hostname string
+	path     string
+)
+
+func Init(apiHostArg string, userArg string, passwordArg string, hostnameArg string, pathArg string) {
+	apiHost = apiHostArg
+	user = userArg
+	password = passwordArg
+	hostname = hostnameArg
+	path = pathArg
+}
+
+func Send(message string, to string, uid string) (bool, string, error) {
+	passwordHash := utils.GetMD5Hash(password)
+
+	_, body, errs := request.Client.Get(apiHost).Query("username=" + user).Query("password=" + passwordHash).Query("to=" + to).Query("message=" + message).Query("from=" + "AvantiMedic").Query("encoding=" + "utf-8").Query("idx=" + uid).Query("notify_url=" + hostname + path).Query("test=" + "1").End()
+	if len(errs) > 0 {
+		for _, err := range errs {
+			Log.Error(err.Error())
+		}
+		return false, "", errors.New("SMS not sent, errors logged")
+	}
+
+	result := strings.Split(body, ":")
+
+	if result[0] == "OK" {
+		return true, "", nil
+	} else {
+		return false, result[1], nil
+	}
+}
