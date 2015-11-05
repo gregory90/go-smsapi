@@ -4,10 +4,10 @@ import (
 	"errors"
 	"strings"
 
-	"bitbucket.org/pqstudio/go-webutils"
-	"bitbucket.org/pqstudio/go-webutils/request"
+	"github.com/gregory90/go-webutils"
+	"github.com/gregory90/go-webutils/request"
 
-	. "bitbucket.org/pqstudio/go-webutils/logger"
+	. "github.com/gregory90/go-webutils/logger"
 )
 
 var (
