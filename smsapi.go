@@ -26,10 +26,10 @@ func Init(apiHostArg string, userArg string, passwordArg string, hostnameArg str
 	path = pathArg
 }
 
-func Send(message string, to string, uid string) (bool, string, error) {
+func Send(message string, from string, to string, uid string, test string) (bool, string, error) {
 	passwordHash := utils.GetMD5Hash(password)
 
-	_, body, errs := request.Client.Get(apiHost).Query("username=" + user).Query("password=" + passwordHash).Query("to=" + to).Query("message=" + message).Query("from=" + "AvantiMedic").Query("encoding=" + "utf-8").Query("idx=" + uid).Query("notify_url=" + hostname + path).Query("test=" + "1").End()
+	_, body, errs := request.Client.Get(apiHost).Query("username=" + user).Query("password=" + passwordHash).Query("to=" + to).Query("message=" + message).Query("from=" + from).Query("encoding=" + "utf-8").Query("idx=" + uid).Query("notify_url=" + hostname + path).Query("test=" + test).End()
 	if len(errs) > 0 {
 		for _, err := range errs {
 			Log.Error(err.Error())
